@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/EMI-Calculator/static/css/main.a5d6384c.css",
+    "main.js": "/EMI-Calculator/static/js/main.b779722e.js",
+    "static/js/787.183ffa24.chunk.js": "/EMI-Calculator/static/js/787.183ffa24.chunk.js",
+    "index.html": "/EMI-Calculator/index.html",
+    "main.a5d6384c.css.map": "/EMI-Calculator/static/css/main.a5d6384c.css.map",
+    "main.b779722e.js.map": "/EMI-Calculator/static/js/main.b779722e.js.map",
+    "787.183ffa24.chunk.js.map": "/EMI-Calculator/static/js/787.183ffa24.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a5d6384c.css",
+    "static/js/main.b779722e.js"
+  ]
+}
