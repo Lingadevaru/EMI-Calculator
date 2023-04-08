@@ -1,6 +1,6 @@
 #  EMI Calculator - Web Application
 
-Tools and tevhnologies(libraries) used:
+Tools and technologies (libraries) used:
 * ReactJS library
 * Hooks: useState, useEffect
 * CSS
