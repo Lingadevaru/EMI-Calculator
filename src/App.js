@@ -1,23 +1,118 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import { tenureData } from "./utils/constants";
+import TextInput from "./components/text-input";
+import SliderInput from "./components/slider-input";
 
 function App() {
+  const [cost, setCost] = useState(0);
+  const [interest, setInterest] = useState(10);
+  //const [fee, setFee] = useState(0);
+  const [downPayment, setDownPayment] = useState(0);
+  const [tenure, setTenure] = useState(12);
+  const [emi, setEmi] = useState(0);
+
+  const calculateEmi = (downPayment) => {
+    if (!cost) return;
+
+    const loanAmount = cost - downPayment;
+    const roi = interest / 100;
+    const numOfYears = tenure / 12;
+
+    const EMI =
+      (loanAmount * roi * (1 + roi) ** numOfYears) /
+      ((1 + roi) ** numOfYears - 1);
+
+    return Number(EMI / 12).toFixed(0);
+  };
+
+  const calculateDP = (emi) => {
+    if (!cost) return;
+
+    const dpPercentage = 100 - (emi / calculateEmi(0)) * 100;
+    return Number((dpPercentage / 100) * cost).toFixed(0);
+  };
+
+  useEffect(() => {
+    if (!(cost > 0)) {
+      setDownPayment(0);
+      setEmi(0);
+    }
+
+    const emi = calculateEmi(downPayment);
+    setEmi(emi);
+  }, [tenure, cost, interest]);
+
+  const updateEMI = (e) => {
+    if (!cost) return;
+
+    const dp = Number(e.target.value);
+    setDownPayment(dp.toFixed(0));
+
+    //Calculate EMI and Update it
+    const calc_emi = calculateEmi(dp);
+    setEmi(calc_emi);
+  };
+
+  const updateDownPayment = (e) => {
+    if (!cost) return;
+
+    const emi = Number(e.target.value);
+    setEmi(emi.toFixed(0));
+
+    //Calculate DP and Update it
+    const calc_dp = calculateDP(emi);
+    setDownPayment(calc_dp);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <span className="title emi">EMI Calculator</span>
+
+      <TextInput
+        title={"Total Cost of Asset"}
+        state={cost}
+        setState={setCost}
+      />
+
+      <TextInput
+        title={"Interest Rate (in %)"}
+        state={interest}
+        setState={setInterest}
+      />
+
+      <SliderInput
+        title={"Down Payment"}
+        state={downPayment}
+        min={0}
+        max={cost}
+        onChange={updateEMI}
+        labelMin={"0%"}
+        labelMax={"100%"}
+      />
+
+      <SliderInput
+        title={"Loan Per Month"}
+        state={emi}
+        min={calculateEmi(cost)}
+        max={calculateEmi(0)}
+        onChange={updateDownPayment}
+      />
+
+      <span className="title value-label">Tenure</span>
+      <div className="tenureContainer">
+        {tenureData.map((t) => {
+          return (
+            <button
+              className={`tenure ${t === tenure ? "selected" : ""}`}
+              onClick={() => setTenure(t)}
+              onChange={updateEMI}
+            >
+              {t}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
