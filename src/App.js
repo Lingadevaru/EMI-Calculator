@@ -16,14 +16,12 @@ function App() {
     if (!cost) return;
 
     const loanAmount = cost - downPayment;
-    const roi = interest / 100;
-    const numOfYears = tenure / 12;
+    const roi = interest / 1200;
 
     const EMI =
-      (loanAmount * roi * (1 + roi) ** numOfYears) /
-      ((1 + roi) ** numOfYears - 1);
+      (loanAmount * roi * (1 + roi) ** tenure) / ((1 + roi) ** tenure - 1);
 
-    return Number(EMI / 12).toFixed(0);
+    return Number(EMI).toFixed(0);
   };
 
   const calculateDP = (emi) => {
@@ -39,8 +37,8 @@ function App() {
       setEmi(0);
     }
 
-    const emi = calculateEmi(downPayment);
-    setEmi(emi);
+    const emi = Number(calculateEmi(downPayment));
+    setEmi(emi.toFixed(0));
   }, [tenure, cost, interest]);
 
   const updateEMI = (e) => {
@@ -106,7 +104,6 @@ function App() {
             <button
               className={`tenure ${t === tenure ? "selected" : ""}`}
               onClick={() => setTenure(t)}
-              onChange={updateEMI}
             >
               {t}
             </button>
